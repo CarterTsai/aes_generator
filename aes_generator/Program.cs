@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 
 namespace aes_generator
 {
@@ -70,6 +71,21 @@ namespace aes_generator
 
 			var decryptMessage = Decrypt (privateKey, Convert.FromBase64String (encryptMessage));
 			Console.WriteLine ("Decrypt Message => " + decryptMessage);
+			
+			DateTime now = DateTime.Now;
+			string customFmts = "yyyyHHmmss";
+			// write file to file
+			string path = @"key" + now.ToString(customFmts) + ".txt"; // path to file
+			using (FileStream fs = File.Create(path))
+			{
+			    // writing data in string
+			    string data1 = "===== public_key =====" + Environment.NewLine + publicKey;
+			    string data2 = "===== private_key =====" + Environment.NewLine + privateKey;
+			
+			    byte[] info = new UTF8Encoding(true).GetBytes(data2 + Environment.NewLine + data1);
+			    fs.Write(info, 0, info.Length);
+			}
+			Console.ReadLine();
 
 		}
 
